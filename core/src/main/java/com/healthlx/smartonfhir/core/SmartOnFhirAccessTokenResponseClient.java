@@ -5,29 +5,24 @@ import org.springframework.security.oauth2.client.endpoint.DefaultAuthorizationC
 import org.springframework.security.oauth2.client.endpoint.OAuth2AccessTokenResponseClient;
 import org.springframework.security.oauth2.client.endpoint.OAuth2AuthorizationCodeGrantRequest;
 import org.springframework.security.oauth2.core.endpoint.OAuth2AccessTokenResponse;
-import org.springframework.stereotype.Component;
 
-import javax.servlet.http.HttpSession;
-
-@Component
 public class SmartOnFhirAccessTokenResponseClient
     implements OAuth2AccessTokenResponseClient<OAuth2AuthorizationCodeGrantRequest> {
 
   private DefaultAuthorizationCodeTokenResponseClient defaultClient;
 
-  private HttpSession session;
+  private SmartOnFhirContext context;
 
   @Autowired
-  public SmartOnFhirAccessTokenResponseClient(HttpSession session) {
-    defaultClient = new DefaultAuthorizationCodeTokenResponseClient();//todo this might be custom for client, right?
-    this.session = session;
+  public SmartOnFhirAccessTokenResponseClient(SmartOnFhirContext context) {
+    defaultClient = new DefaultAuthorizationCodeTokenResponseClient();
+    this.context = context;
   }
 
   @Override
   public OAuth2AccessTokenResponse getTokenResponse(OAuth2AuthorizationCodeGrantRequest authorizationGrantRequest) {
-    //todo add context with nice API
     OAuth2AccessTokenResponse tokenResponse = defaultClient.getTokenResponse(authorizationGrantRequest);
-    session.setAttribute("smart-context", tokenResponse.getAdditionalParameters());//todo not all should be copied
+    context.setContextData(tokenResponse.getAdditionalParameters());//check whether its not too much
     return tokenResponse;
   }
 
