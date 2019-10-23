@@ -22,7 +22,7 @@ public class SmartOnFhirAccessTokenResponseClient
   @Override
   public OAuth2AccessTokenResponse getTokenResponse(OAuth2AuthorizationCodeGrantRequest authorizationGrantRequest) {
     OAuth2AccessTokenResponse tokenResponse = defaultClient.getTokenResponse(authorizationGrantRequest);
-    context.setContextData(tokenResponse.getAdditionalParameters());//check whether its not too much
+    context.setContextData(tokenResponse.getAdditionalParameters()); //todo check whether its not too much
     return tokenResponse;
   }
 

@@ -10,38 +10,39 @@ import java.util.Map;
 
 public class SmartOnFhirContext {
 
-    private static final String SMART_CONTEXT_SESSION_KEY = "SMART_ON_FHIR_CONTEXT";
+  private static final String SMART_CONTEXT_SESSION_KEY = "SMART_ON_FHIR_CONTEXT";
 
-    private HttpSession session;
+  private HttpSession session;
 
-    public SmartOnFhirContext(HttpSession session) {
-        this.session = session;
-    }
+  public SmartOnFhirContext(HttpSession session) {
+    this.session = session;
+  }
 
-    public String getPatient() {
-        return getContextValue("patient");
-    }
+  public String getPatient() {
+    return getContextValue("patient");
+  }
 
-    public String getEncounter() {
-        return getContextValue("encounter");
-    }
+  public String getEncounter() {
+    return getContextValue("encounter");
+  }
 
-    public String getProfile() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Assert.notNull(authentication, "Authentication object is missing from security context.");
-        return ((OAuth2User) authentication.getPrincipal()).getAttribute("profile");
-    }
+  public String getProfile() {
+    Authentication authentication = SecurityContextHolder.getContext()
+        .getAuthentication();
+    Assert.notNull(authentication, "Authentication object is missing from security context.");
+    return ((OAuth2User) authentication.getPrincipal()).getAttribute("profile");
+  }
 
-    void setContextData(Map<String, Object> additionalParameters) {
-        session.setAttribute(SMART_CONTEXT_SESSION_KEY, additionalParameters);
-    }
+  public String getCustomContextValue(String contextKey) {
+    return getContextValue(contextKey);
+  }
 
-    public String getCustomContextValue(String contextKey) {
-        return getContextValue(contextKey);
-    }
+  void setContextData(Map<String, Object> additionalParameters) {
+    session.setAttribute(SMART_CONTEXT_SESSION_KEY, additionalParameters);
+  }
 
-    private String getContextValue(String contextKey) {
-        Map attribute = (Map) session.getAttribute(SMART_CONTEXT_SESSION_KEY);
-        return (String) attribute.get(contextKey);
-    }
+  private String getContextValue(String contextKey) {
+    Map attribute = (Map) session.getAttribute(SMART_CONTEXT_SESSION_KEY);
+    return (String) attribute.get(contextKey);
+  }
 }

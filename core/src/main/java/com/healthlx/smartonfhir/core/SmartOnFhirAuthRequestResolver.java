@@ -11,43 +11,46 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SmartOnFhirAuthRequestResolver implements OAuth2AuthorizationRequestResolver {
-    private final OAuth2AuthorizationRequestResolver defaultAuthorizationRequestResolver;
 
-    public SmartOnFhirAuthRequestResolver(
-            ClientRegistrationRepository clientRegistrationRepository) {
+  private final OAuth2AuthorizationRequestResolver defaultAuthorizationRequestResolver;
 
-        this.defaultAuthorizationRequestResolver =
-                new DefaultOAuth2AuthorizationRequestResolver(
-                        clientRegistrationRepository, "/oauth2/authorization");
+  public SmartOnFhirAuthRequestResolver(ClientRegistrationRepository clientRegistrationRepository) {
+
+    this.defaultAuthorizationRequestResolver = new DefaultOAuth2AuthorizationRequestResolver(
+        clientRegistrationRepository, "/oauth2/authorization");
+  }
+
+  @Override
+  public OAuth2AuthorizationRequest resolve(HttpServletRequest request) {
+    OAuth2AuthorizationRequest authorizationRequest = this.defaultAuthorizationRequestResolver.resolve(request);
+    return handleSmartOnFhirAuthorizationDetails(authorizationRequest, request);
+  }
+
+  @Override
+  public OAuth2AuthorizationRequest resolve(HttpServletRequest request, String clientRegistrationId) {
+    OAuth2AuthorizationRequest authorizationRequest = this.defaultAuthorizationRequestResolver.resolve(request,
+        clientRegistrationId);
+    return handleSmartOnFhirAuthorizationDetails(authorizationRequest, request);
+
+  }
+
+  private OAuth2AuthorizationRequest handleSmartOnFhirAuthorizationDetails(
+      OAuth2AuthorizationRequest authorizationRequest, HttpServletRequest request) {
+    if (authorizationRequest == null) {
+      return null;
     }
 
-    @Override
-    public OAuth2AuthorizationRequest resolve(HttpServletRequest request) {
-        OAuth2AuthorizationRequest authorizationRequest = this.defaultAuthorizationRequestResolver.resolve(request);
-        return handleSmartOnFhirAuthorizationDetails(authorizationRequest, request);
-    }
+    DefaultSavedRequest springSavedRequest = (DefaultSavedRequest) request.getSession()
+        .getAttribute("SPRING_SECURITY_SAVED_REQUEST");
+    SmartOnFhirSavedRequest smartSavedRequest = new SmartOnFhirSavedRequest(springSavedRequest);
 
-    @Override
-    public OAuth2AuthorizationRequest resolve(
-            HttpServletRequest request, String clientRegistrationId) {
-        OAuth2AuthorizationRequest authorizationRequest = this.defaultAuthorizationRequestResolver.resolve(request, clientRegistrationId);
-        return handleSmartOnFhirAuthorizationDetails(authorizationRequest, request);
+    Map<String, Object> additionalParameters = new HashMap<>();
+    additionalParameters.putAll(authorizationRequest.getAdditionalParameters());
+    additionalParameters.putAll(smartSavedRequest.getSmartLaunchParameters());
 
-    }
-
-    private OAuth2AuthorizationRequest handleSmartOnFhirAuthorizationDetails(OAuth2AuthorizationRequest authorizationRequest, HttpServletRequest request) {
-        if (authorizationRequest == null) return null;
-
-        DefaultSavedRequest springSavedRequest = (DefaultSavedRequest) request.getSession().getAttribute("SPRING_SECURITY_SAVED_REQUEST");
-        SmartOnFhirSavedRequest smartSavedRequest = new SmartOnFhirSavedRequest(springSavedRequest);
-
-        Map<String, Object> additionalParameters = new HashMap<>();
-        additionalParameters.putAll(authorizationRequest.getAdditionalParameters());
-        additionalParameters.putAll(smartSavedRequest.getSmartLaunchParameters());
-
-        return OAuth2AuthorizationRequest.from(authorizationRequest)
-                .additionalParameters(additionalParameters)
-                .build();
-    }
+    return OAuth2AuthorizationRequest.from(authorizationRequest)
+        .additionalParameters(additionalParameters)
+        .build();
+  }
 
 }
