@@ -10,5 +10,5 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 @Import(SmartOnFhirConfiguration.class)
-@interface EnableSmartOnFhir {}
+public @interface EnableSmartOnFhir {}
 
