@@ -11,12 +11,12 @@ import javax.servlet.http.HttpSession;
 public class SmartOnFhirConfiguration {
 
   @Bean
-  public SmartOnFhirAccessTokenResponseClient smartOnFhirAccessTokenResponseClient(SmartOnFhirContext context){
-    return new SmartOnFhirAccessTokenResponseClient(context);
+  SmartOnFhirContext smartOnFhirContext(HttpSession session) {
+    return new SmartOnFhirContext(session);
   }
 
   @Bean
-  SmartOnFhirContext smartOnFhirContext(HttpSession session){
-    return new SmartOnFhirContext(session);
+  public SmartOnFhirAccessTokenResponseClient smartOnFhirAccessTokenResponseClient(SmartOnFhirContext context) {
+    return new SmartOnFhirAccessTokenResponseClient(context);
   }
 }
