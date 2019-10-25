@@ -12,7 +12,7 @@ Our goals are:
 ### Prerequisites
 * Since [SMART App Launch Framework](http://www.hl7.org/fhir/smart-app-launch/) is based on [Oauth 2.0](https://tools.ietf.org/html/rfc6749#section-4.1) with [OpenID](https://openid.net/specs/openid-connect-core-1_0.html#CodeFlowAuth) you need to get familiar a bit.
 * We are using [Spring Security 5 Oauth 2.0 Client  implementation](https://docs.spring.io/spring-security/site/docs/current/reference/htmlsingle/#oauth2login) under the hood.
-* We are testing against java 8
+* We are using java 8.
 
 ## Installation
 * Just add dependency:
@@ -32,7 +32,7 @@ dependencies {
 If you want to start new project quickly you need to follow those steps:
 * Enable our configurations.
 ```java
-@EnableSmartOnFhir //<---Add this one
+@EnableSmartOnFhir // <---Add this one
 @Configuation
 class YourConfiguration {
 }
@@ -102,6 +102,13 @@ public class YourConfiguration extends WebSecurityConfigurerAdapter {
   }
 }
 ```
+
+Also: With custom configuration you might want to depend only on core module to avoid having our auto configuration classes on classpath:
+```groovy
+dependencies {
+    implementation 'com.github.HealthLX.smart-on-fhir:core:0.1.0'
+}
+```
 ## Usage
 To gain access to SMART Context just wire one bean that is created for you:
 ```java
@@ -139,4 +146,4 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 Please make sure to update tests as appropriate.
 
 ## License
-This project is licensed under the Apache 2.0 License - see the [LICENSE.md](LICENSE.md) file for details
+This project is licensed under the Apache 2.0 License - see the [LICENSE.md](LICENSE.md) file for details.
