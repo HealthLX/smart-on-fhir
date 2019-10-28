@@ -1,4 +1,6 @@
 # smart-on-fhir
+[![](https://jitpack.io/v/HealthLX/smart-on-fhir.svg)](https://jitpack.io/#HealthLX/smart-on-fhir)
+
 Library that makes it easy to start developing an app using [SMART App Launch Framework](http://www.hl7.org/fhir/smart-app-launch/).
 
 Our goals are:
