@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import javax.servlet.http.HttpSession;
 
 @Configuration
-public class SmartOnFhirConfiguration {
+class SmartOnFhirConfiguration {
 
   @Bean
   SmartOnFhirContext smartOnFhirContext(HttpSession session) {
@@ -16,7 +16,7 @@ public class SmartOnFhirConfiguration {
   }
 
   @Bean
-  public SmartOnFhirAccessTokenResponseClient smartOnFhirAccessTokenResponseClient(SmartOnFhirContext context) {
+  SmartOnFhirAccessTokenResponseClient smartOnFhirAccessTokenResponseClient(SmartOnFhirContext context) {
     return new SmartOnFhirAccessTokenResponseClient(context);
   }
 }

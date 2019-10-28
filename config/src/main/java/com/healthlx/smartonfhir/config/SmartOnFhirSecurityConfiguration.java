@@ -11,14 +11,14 @@ import org.springframework.security.oauth2.client.registration.ClientRegistratio
 
 @Configuration
 @EnableWebSecurity
-public class SmartOnFhirSecurityConfiguration extends WebSecurityConfigurerAdapter {
+class SmartOnFhirSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-  private ClientRegistrationRepository clientRegistrationRepository;
+  private final ClientRegistrationRepository clientRegistrationRepository;
 
-  private SmartOnFhirAccessTokenResponseClient smartOnFhirAccessTokenResponseClient;
+  private final SmartOnFhirAccessTokenResponseClient smartOnFhirAccessTokenResponseClient;
 
   @Autowired
-  public SmartOnFhirSecurityConfiguration(ClientRegistrationRepository clientRegistrationRepository,
+  SmartOnFhirSecurityConfiguration(ClientRegistrationRepository clientRegistrationRepository,
       SmartOnFhirAccessTokenResponseClient smartOnFhirAccessTokenResponseClient) {
     this.clientRegistrationRepository = clientRegistrationRepository;
     this.smartOnFhirAccessTokenResponseClient = smartOnFhirAccessTokenResponseClient;
