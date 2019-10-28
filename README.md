@@ -133,7 +133,7 @@ class Foo{
 But be sure user is authorized to use it. In auto configured setup we require authorization for all pages. Usually if app is started from EHR it is enough.
 
 ### Extra use cases
-To use data from launch context you might need to have FHIR client that is authorized to launching EHR. Or if you have one you might need to provide access token for it. To obtain it use  you should use Spring provided ```OAuth2AuthorizedClientService```:
+To use data from launch context you might need to have FHIR client that is authorized to launching EHR. Or if you have one you might need to provide access token for it. To obtain it you should use Spring provided ```OAuth2AuthorizedClientService```:
 ```java
      Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
      OAuth2AuthorizedClient authorizedClient = this.authorizedClientService.loadAuthorizedClient("ehr-client",authentication.getName());
