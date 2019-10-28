@@ -33,7 +33,7 @@ class SmartOnFhirSecurityConfiguration extends WebSecurityConfigurerAdapter {
         .disable()
         .oauth2Login()
         .authorizationEndpoint()
-        .authorizationRequestResolver(smartOnFhirAuthRequestResolver)
+        .authorizationRequestResolver(this.smartOnFhirAuthRequestResolver)
         .and()
         .tokenEndpoint()
         .accessTokenResponseClient(this.smartOnFhirAccessTokenResponseClient);

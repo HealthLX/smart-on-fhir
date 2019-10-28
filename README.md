@@ -24,7 +24,7 @@ repositories {
     maven { url 'https://www.jitpack.io' }
 }
 dependencies {
-    implementation 'com.github.HealthLX:smart-on-fhir:reference-impl-split-SNAPSHOT'
+    implementation 'com.github.HealthLX:smart-on-fhir:0.1.0'
 }
 ```
 
@@ -74,7 +74,7 @@ In case you want to have custom security configuration you need to register and 
   }
 
   @Bean
-  public SmartOnFhirAccessTokenResponseClient smartOnFhirAccessTokenResponseClient(SmartOnFhirContext context) {
+  SmartOnFhirAccessTokenResponseClient smartOnFhirAccessTokenResponseClient(SmartOnFhirContext context) {
     return new SmartOnFhirAccessTokenResponseClient(context);
   }
 ``` 
@@ -89,10 +89,10 @@ public class YourConfiguration extends WebSecurityConfigurerAdapter {
     http
         //your config
 
-        //Our AuthRequest resolver could be created on flight
+        //Our AuthRequest resolver
         .oauth2Login()
-        .authorizationEndpoint()
-        .authorizationRequestResolver(new SmartOnFhirAuthRequestResolver(clientRegistrationRepository))
+         .authorizationEndpoint()
+                .authorizationRequestResolver(this.smartOnFhirAuthRequestResolver)
 
         .and()
 

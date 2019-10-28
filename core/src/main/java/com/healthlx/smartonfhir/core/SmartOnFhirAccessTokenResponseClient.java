@@ -6,6 +6,9 @@ import org.springframework.security.oauth2.client.endpoint.OAuth2AccessTokenResp
 import org.springframework.security.oauth2.client.endpoint.OAuth2AuthorizationCodeGrantRequest;
 import org.springframework.security.oauth2.core.endpoint.OAuth2AccessTokenResponse;
 
+/**
+ *  Implementation of ResponseClient, stores additional parameters to {@link SmartOnFhirContext}
+ */
 public class SmartOnFhirAccessTokenResponseClient
     implements OAuth2AccessTokenResponseClient<OAuth2AuthorizationCodeGrantRequest> {
 
