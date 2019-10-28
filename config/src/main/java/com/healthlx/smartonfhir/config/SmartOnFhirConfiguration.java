@@ -1,9 +1,11 @@
 package com.healthlx.smartonfhir.config;
 
 import com.healthlx.smartonfhir.core.SmartOnFhirAccessTokenResponseClient;
+import com.healthlx.smartonfhir.core.SmartOnFhirAuthRequestResolver;
 import com.healthlx.smartonfhir.core.SmartOnFhirContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 
 import javax.servlet.http.HttpSession;
 
@@ -18,5 +20,10 @@ class SmartOnFhirConfiguration {
   @Bean
   SmartOnFhirAccessTokenResponseClient smartOnFhirAccessTokenResponseClient(SmartOnFhirContext context) {
     return new SmartOnFhirAccessTokenResponseClient(context);
+  }
+
+  @Bean
+  SmartOnFhirAuthRequestResolver smartOnFhirAuthRequestResolver(ClientRegistrationRepository clientRegistrationRepository){
+    return new SmartOnFhirAuthRequestResolver(clientRegistrationRepository);
   }
 }

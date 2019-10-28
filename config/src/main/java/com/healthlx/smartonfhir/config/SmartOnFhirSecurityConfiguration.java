@@ -7,20 +7,19 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 
 @Configuration
 @EnableWebSecurity
 class SmartOnFhirSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-  private final ClientRegistrationRepository clientRegistrationRepository;
+  private final SmartOnFhirAuthRequestResolver smartOnFhirAuthRequestResolver;
 
   private final SmartOnFhirAccessTokenResponseClient smartOnFhirAccessTokenResponseClient;
 
   @Autowired
-  SmartOnFhirSecurityConfiguration(ClientRegistrationRepository clientRegistrationRepository,
+  SmartOnFhirSecurityConfiguration(SmartOnFhirAuthRequestResolver smartOnFhirAuthRequestResolver,
       SmartOnFhirAccessTokenResponseClient smartOnFhirAccessTokenResponseClient) {
-    this.clientRegistrationRepository = clientRegistrationRepository;
+    this.smartOnFhirAuthRequestResolver = smartOnFhirAuthRequestResolver;
     this.smartOnFhirAccessTokenResponseClient = smartOnFhirAccessTokenResponseClient;
   }
 
@@ -34,7 +33,7 @@ class SmartOnFhirSecurityConfiguration extends WebSecurityConfigurerAdapter {
         .disable()
         .oauth2Login()
         .authorizationEndpoint()
-        .authorizationRequestResolver(new SmartOnFhirAuthRequestResolver(this.clientRegistrationRepository))
+        .authorizationRequestResolver(smartOnFhirAuthRequestResolver)
         .and()
         .tokenEndpoint()
         .accessTokenResponseClient(this.smartOnFhirAccessTokenResponseClient);
