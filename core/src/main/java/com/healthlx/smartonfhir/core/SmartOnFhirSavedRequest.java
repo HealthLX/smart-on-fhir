@@ -4,6 +4,9 @@ import org.springframework.security.web.savedrequest.DefaultSavedRequest;
 
 import java.util.LinkedHashMap;
 
+/**
+ * Wrapper on top of {@link DefaultSavedRequest} to handle SMART on FHIR launch attributes
+ */
 class SmartOnFhirSavedRequest {
 
   private final DefaultSavedRequest savedRequest;
@@ -22,7 +25,7 @@ class SmartOnFhirSavedRequest {
       }
 
       String iss = getSavedRequestParameter(savedRequest, "iss");
-      if (launch != null) {
+      if (iss != null) {
         parameters.put("aud", iss);
       }
     }

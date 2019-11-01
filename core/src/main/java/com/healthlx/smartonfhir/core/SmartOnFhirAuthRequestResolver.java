@@ -10,6 +10,10 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Implementation of {@link OAuth2AuthorizationRequestResolver}
+ * Resolves request with additional parameters required by SMART on FHIR spec
+ */
 public class SmartOnFhirAuthRequestResolver implements OAuth2AuthorizationRequestResolver {
 
   private final OAuth2AuthorizationRequestResolver defaultAuthorizationRequestResolver;

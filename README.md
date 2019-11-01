@@ -26,7 +26,7 @@ repositories {
     maven { url 'https://www.jitpack.io' }
 }
 dependencies {
-    implementation 'com.github.HealthLX:smart-on-fhir:reference-impl-split-SNAPSHOT'
+    implementation 'com.github.HealthLX:smart-on-fhir:0.1.0'
 }
 ```
 
@@ -76,7 +76,7 @@ In case you want to have custom security configuration you need to register and 
   }
 
   @Bean
-  public SmartOnFhirAccessTokenResponseClient smartOnFhirAccessTokenResponseClient(SmartOnFhirContext context) {
+  SmartOnFhirAccessTokenResponseClient smartOnFhirAccessTokenResponseClient(SmartOnFhirContext context) {
     return new SmartOnFhirAccessTokenResponseClient(context);
   }
 ``` 
@@ -91,10 +91,10 @@ public class YourConfiguration extends WebSecurityConfigurerAdapter {
     http
         //your config
 
-        //Our AuthRequest resolver could be created on flight
+        //Our AuthRequest resolver
         .oauth2Login()
-        .authorizationEndpoint()
-        .authorizationRequestResolver(new SmartOnFhirAuthRequestResolver(clientRegistrationRepository))
+         .authorizationEndpoint()
+                .authorizationRequestResolver(this.smartOnFhirAuthRequestResolver)
 
         .and()
 
@@ -133,7 +133,7 @@ class Foo{
 But be sure user is authorized to use it. In auto configured setup we require authorization for all pages. Usually if app is started from EHR it is enough.
 
 ### Extra use cases
-To use data from launch context you might need to have FHIR client that is authorized to launching EHR. Or if you have one you might need to provide access token for it. To obtain it use  you should use Spring provided ```OAuth2AuthorizedClientService```:
+To use data from launch context you might need to have FHIR client that is authorized to launching EHR. Or if you have one you might need to provide access token for it. To obtain it you should use Spring provided ```OAuth2AuthorizedClientService```:
 ```java
      Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
      OAuth2AuthorizedClient authorizedClient = this.authorizedClientService.loadAuthorizedClient("ehr-client",authentication.getName());
