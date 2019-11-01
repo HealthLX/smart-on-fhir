@@ -1,5 +1,6 @@
 # smart-on-fhir
 [![](https://jitpack.io/v/HealthLX/smart-on-fhir.svg)](https://jitpack.io/#HealthLX/smart-on-fhir)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/ab47d1c1d0714b62a59533a42d649819)](https://www.codacy.com/manual/dhasilin/smart-on-fhir?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=HealthLX/smart-on-fhir&amp;utm_campaign=Badge_Grade)
 
 Library that makes it easy to start developing an app using [SMART App Launch Framework](http://www.hl7.org/fhir/smart-app-launch/).
 
