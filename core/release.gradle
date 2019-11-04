@@ -23,7 +23,7 @@ artifacts {
 // Configure group ID, artifact ID, and version
 group = "com.healthlx.smartonfhir"
 archivesBaseName = "core"
-version = "0.2.1-SNAPSHOT"
+version = "0.3.1-SNAPSHOT"
 
 // Build, sign, and upload
 uploadArchives {
