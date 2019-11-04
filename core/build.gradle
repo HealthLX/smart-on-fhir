@@ -3,7 +3,6 @@ plugins {
 }
 
 repositories {
-    mavenLocal()
     mavenCentral()
 }
 
@@ -20,3 +19,8 @@ dependencies {
 test {
     useJUnitPlatform()
 }
+
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+
+apply from: 'release.gradle'
