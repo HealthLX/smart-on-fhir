@@ -1,9 +1,15 @@
 language: java
-install: true
-
 os: linux
 dist: trusty
 jdk: openjdk8
 
+before_install:
+  - chmod -R ug+x .travis
+  - .travis/install.sh
+
 script:
   - ./gradlew build
+  - chmod -R ug+x .travis
+  - .travis/build.sh
+  - .travis/deploy-gate.sh
+  - .travis/tag-master-gate.sh
