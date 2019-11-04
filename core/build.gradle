@@ -3,7 +3,6 @@ plugins {
 }
 
 repositories {
-    mavenLocal()
     mavenCentral()
 }
 
@@ -19,4 +18,81 @@ dependencies {
 
 test {
     useJUnitPlatform()
+}
+
+// Signing
+apply plugin: 'signing'
+signing {
+    sign configurations.archives
+}
+
+// Deploying
+apply plugin: 'maven'
+
+// Add Javadoc JAR and sources JAR to artifact
+task javadocJar(type: Jar) {
+    classifier = 'javadoc'
+    from javadoc
+}
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+artifacts {
+    archives javadocJar, sourcesJar
+}
+
+// Configure group ID, artifact ID, and version
+group = "com.healthlx.smartonfhir"
+archivesBaseName = "core"
+version = "0.2"
+
+// Build, sign, and upload
+uploadArchives {
+    repositories {
+        mavenDeployer {
+
+            // Sign POM
+            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+            // Destination
+            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
+            snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
+
+            // Add required metadata to POM
+            pom.project {
+                name 'smart-on-fhir'
+                packaging 'jar'
+                description 'Library that makes it easy to start developing an app using SMART App Launch Framework.'
+                url 'https://https://github.com/HealthLX/smart-on-fhir'
+
+                scm {
+                    connection 'scm:git:https://github.com/HealthLX/smart-on-fhir.git'
+                    developerConnection 'scm:git:https://github.com/HealthLX/smart-on-fhir.git'
+                    url 'https://github.com/HealthLX/smart-on-fhir/'
+                }
+
+                licenses {
+                    license {
+                        name 'The Apache License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id 'dhasilin'
+                        name 'Dmytro Hasilin'
+                        email 'a.kravs@gmail.com'
+                        organization 'HealthLX'
+                        organizationUrl 'https://www.healthlx.com/'
+                    }
+                }
+            }
+        }
+    }
 }
