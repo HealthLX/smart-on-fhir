@@ -1,5 +1,4 @@
 # smart-on-fhir
-[![](https://jitpack.io/v/HealthLX/smart-on-fhir.svg)](https://jitpack.io/#HealthLX/smart-on-fhir)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/ab47d1c1d0714b62a59533a42d649819)](https://www.codacy.com/manual/dhasilin/smart-on-fhir?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=HealthLX/smart-on-fhir&amp;utm_campaign=Badge_Grade)
 
 Library that makes it easy to start developing an app using [SMART App Launch Framework](http://www.hl7.org/fhir/smart-app-launch/).
@@ -23,12 +22,18 @@ Our goals are:
 At the moment we are working on publishing to maven central. So for now please use [JitPack](https://www.jitpack.io):
 
 ```groovy
-repositories {
-    maven { url 'https://www.jitpack.io' }
-}
 dependencies {
-    implementation 'com.github.HealthLX:smart-on-fhir:0.1.0'
+     implementation 'com.healthlx.smartonfhir:config:0.3'
 }
+```
+or
+
+```xml
+<dependency>
+  <groupId>com.healthlx.smartonfhir</groupId>
+  <artifactId>config</artifactId>
+  <version>0.3</version>
+</dependency>
 ```
 
 ### Auto configuration for your Spring Boot app
@@ -106,12 +111,22 @@ public class YourConfiguration extends WebSecurityConfigurerAdapter {
 }
 ```
 
-Also: With custom configuration you might want to depend only on core module to avoid having our auto configuration classes on classpath:
+Also with custom configuration you might want to depend only on core module to avoid having our auto configuration classes on classpath:
 ```groovy
 dependencies {
-    implementation 'com.github.HealthLX.smart-on-fhir:core:0.1.0'
+     implementation 'com.healthlx.smartonfhir:core:0.3'
 }
 ```
+or
+
+```xml
+<dependency>
+  <groupId>com.healthlx.smartonfhir</groupId>
+  <artifactId>core</artifactId>
+  <version>0.3</version>
+</dependency>
+```
+
 ## Usage
 To gain access to SMART Context just wire one bean that is created for you:
 ```java
