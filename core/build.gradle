@@ -3,7 +3,6 @@ plugins {
 }
 
 repositories {
-    mavenLocal()
     mavenCentral()
 }
 
@@ -19,4 +18,11 @@ dependencies {
 
 test {
     useJUnitPlatform()
+}
+
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+
+if (project.hasProperty("signing.keyId")) {
+    apply from: 'release.gradle'
 }

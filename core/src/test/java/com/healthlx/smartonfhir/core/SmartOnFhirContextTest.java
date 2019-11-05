@@ -5,10 +5,10 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import javax.servlet.http.HttpSession;
-
 import java.util.Collections;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
