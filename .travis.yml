@@ -5,5 +5,15 @@ os: linux
 dist: trusty
 jdk: openjdk8
 
+before_install:
+  - sudo apt-get install jq
+  - curl -LSs $(curl -LSs https://api.github.com/repos/codacy/codacy-coverage-reporter/releases/latest | jq -r '.assets | map({content_type, browser_download_url} | select(.content_type | contains("application/java-archive"))) | .[0].browser_download_url') -o codacy-coverage-reporter-assembly.jar
+
+
 script:
-  - ./gradlew build
+  - ./gradlew build jacocoTestReport
+
+after_success:
+  - java -jar codacy-coverage-reporter-assembly.jar report -l Java -r core/build/reports/jacoco/test/jacocoTestReport.xml --partial
+  - java -jar codacy-coverage-reporter-assembly.jar report -l Java -r config/build/reports/jacoco/test/jacocoTestReport.xml --partial
+  - java -jar codacy-coverage-reporter-assembly.jar final

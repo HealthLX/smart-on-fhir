@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'jacoco'
 }
 
 repositories {
@@ -18,6 +19,12 @@ dependencies {
 
 test {
     useJUnitPlatform()
+}
+
+jacocoTestReport{
+    reports{
+        xml.enabled true
+    }
 }
 
 sourceCompatibility = '1.8'
