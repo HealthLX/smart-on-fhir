@@ -30,4 +30,6 @@ jacocoTestReport{
 sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
 
-apply from: 'release.gradle'
+if (project.hasProperty("signing.keyId")) {
+    apply from: 'release.gradle'
+}
