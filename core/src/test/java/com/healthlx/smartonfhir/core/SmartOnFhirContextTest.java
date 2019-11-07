@@ -20,7 +20,7 @@ class SmartOnFhirContextTest {
     HttpSession mock = Mockito.mock(HttpSession.class);
     when(mock.getAttribute(eq(SmartOnFhirContext.SMART_CONTEXT_SESSION_KEY)))
         .thenReturn(Collections.singletonMap("patient", "Patient/TEST_ID"));
-    SmartOnFhirContext smartOnFhirContext = new SmartOnFhirContext(mock);
+    SmartOnFhirContext smartOnFhirContext = new SmartOnFhirContext(mock, null);
 
     assertEquals("Patient/TEST_ID", smartOnFhirContext.getPatient());
   }
@@ -28,14 +28,16 @@ class SmartOnFhirContextTest {
   @DisplayName("Exception should be thrown if patient is queried before authentication")
   @Test
   void patientShouldBeQueriedAfterAuth() {
-    SmartOnFhirContext smartOnFhirContext = new SmartOnFhirContext(Mockito.mock(HttpSession.class));
+    SmartOnFhirContext smartOnFhirContext = new SmartOnFhirContext(Mockito.mock(HttpSession.class),
+        null);
     assertThrows(IllegalArgumentException.class, smartOnFhirContext::getPatient);
   }
 
   @DisplayName("Exception should be thrown if profile is queried before authentication")
   @Test
   void profileShouldBeQueriedAfterAuth() {
-    SmartOnFhirContext smartOnFhirContext = new SmartOnFhirContext(Mockito.mock(HttpSession.class));
+    SmartOnFhirContext smartOnFhirContext = new SmartOnFhirContext(Mockito.mock(HttpSession.class),
+        null);
     assertThrows(IllegalArgumentException.class, smartOnFhirContext::getProfile);
   }
 }
