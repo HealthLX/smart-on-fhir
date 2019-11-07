@@ -1,23 +1,24 @@
 # smart-on-fhir
+[![Build Status](https://travis-ci.org/HealthLX/smart-on-fhir.svg?branch=master)](https://travis-ci.org/HealthLX/smart-on-fhir)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/ab47d1c1d0714b62a59533a42d649819)](https://www.codacy.com/manual/dhasilin/smart-on-fhir?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=HealthLX/smart-on-fhir&amp;utm_campaign=Badge_Grade)
 
 Library that makes it easy to start developing an app using [SMART App Launch Framework](http://www.hl7.org/fhir/smart-app-launch/).
 
 Our goals are:
 
-* Enable faster development. Developers could quickly start coding.
-* Hide all boilerplate code. Error prone details are implemented once and hidden.
-* Stay flexible. We provide auto-configuration for early stage of development, and enhanced beans for your custom configuration at later stages.
+*   Enable faster development. Developers could quickly start coding.
+*   Hide all boilerplate code. Error prone details are implemented once and hidden.
+*   Stay flexible. We provide auto-configuration for early stage of development, and enhanced beans for your custom configuration at later stages.
 
 ## Getting Started
 
 ### Prerequisites
-* Since [SMART App Launch Framework](http://www.hl7.org/fhir/smart-app-launch/) is based on [Oauth 2.0](https://tools.ietf.org/html/rfc6749#section-4.1) with [OpenID](https://openid.net/specs/openid-connect-core-1_0.html#CodeFlowAuth) you need to get familiar a bit.
-* We are using [Spring Security 5 Oauth 2.0 Client  implementation](https://docs.spring.io/spring-security/site/docs/current/reference/htmlsingle/#oauth2login) under the hood.
-* We are using java 8.
+*   Since [SMART App Launch Framework](http://www.hl7.org/fhir/smart-app-launch/) is based on [Oauth 2.0](https://tools.ietf.org/html/rfc6749#section-4.1) with [OpenID](https://openid.net/specs/openid-connect-core-1_0.html#CodeFlowAuth) you need to get familiar a bit.
+*   We are using [Spring Security 5 Oauth 2.0 Client  implementation](https://docs.spring.io/spring-security/site/docs/current/reference/htmlsingle/#oauth2login) under the hood.
+*   We are using java 8.
 
 ## Installation
-* Just add dependency:
+*   Just add dependency:
 
 At the moment we are working on publishing to maven central. So for now please use [JitPack](https://www.jitpack.io):
 
@@ -38,14 +39,14 @@ or
 
 ### Auto configuration for your Spring Boot app
 If you want to start new project quickly you need to follow those steps:
-* Enable our configurations.
+*   Enable our configurations.
 ```java
 @EnableSmartOnFhir // <---Add this one
 @Configuation
 class YourConfiguration {
 }
 ```
-* Configure your server (EHR) auth data:
+*   Configure your server (EHR) auth data:
 
 This is example for Public client.
 ```yaml
@@ -74,7 +75,7 @@ For other options to configure look [here](https://docs.spring.io/spring-securit
 
 ### Custom configuration
 In case you want to have custom security configuration you need to register and wire our beans:
-* Register them:
+*   Register them:
 ```java
   @Bean
   SmartOnFhirContext smartOnFhirContext(HttpSession session) {
@@ -86,7 +87,7 @@ In case you want to have custom security configuration you need to register and 
     return new SmartOnFhirAccessTokenResponseClient(context);
   }
 ``` 
-* Wire them
+*   Wire them
 ```java
 @Configuration
 @EnableWebSecurity
