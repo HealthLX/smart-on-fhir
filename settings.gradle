@@ -11,4 +11,4 @@ rootProject.name = 'smart-on-fhir'
 
 include 'core'
 include 'config'
-
+include 'sample'

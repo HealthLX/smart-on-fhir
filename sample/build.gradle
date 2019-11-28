@@ -1,0 +1,20 @@
+plugins {
+    id 'org.springframework.boot' version '2.1.4.RELEASE'
+    id 'java'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'org.springframework.boot:spring-boot-starter-web:2.1.4.RELEASE'
+
+    compile "org.springframework.security:spring-security-web:5.2.0.RELEASE"
+    compile "org.springframework.security:spring-security-config:5.2.0.RELEASE"
+
+    implementation 'com.healthlx.smartonfhir:config:0.3'
+
+    compile 'ca.uhn.hapi.fhir:hapi-fhir-structures-r4:4.0.3'
+    compile 'ca.uhn.hapi.fhir:hapi-fhir-client:4.0.3'
+}
