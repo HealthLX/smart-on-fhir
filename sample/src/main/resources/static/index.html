@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+
+<head>
+	<meta charset="utf-8">
+	<title>HealthLX smart-on-fhir sample demo app</title>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/vue-router/3.0.6/vue-router.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/element-ui/2.8.2/index.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/element-ui/2.8.2/locale/en.min.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/element-ui/2.8.2/theme-chalk/index.css">
+	<style>
+		body {
+			font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+			margin: 0;
+		}
+		.hlx-logo > img {
+			width: 300px;
+		}
+		#app {
+			min-height: 100vh;
+		}
+		.el-select {
+			width: 100%;
+		}
+		.el-footer {
+		    display: flex;
+		    justify-content: space-between;
+		    align-items: center;
+		}
+
+
+    </style>
+</head>
+
+<body>
+
+	<template id="hlx-patient-form">
+		<div v-loading="loading">
+			<el-row type="flex" justify="center">
+				<el-col :span="8" :xs="16" :sm="16" :md="8">
+					<el-form
+							ref="patientForm"
+							:rules="rules"
+							:model="context"
+							label-width="120px">
+
+						<el-form-item label="Patient">
+							<el-input v-model="context.patient.name" :readonly="true"></el-input>
+						</el-form-item>
+
+						<el-form-item label="Event" prop="eventId">
+							<el-select v-model="context.eventId" @change="onChange">
+								<el-option
+										v-for="event in context.events"
+										:label="event.name"
+										:value="event.id"></el-option>
+							</el-select>
+						</el-form-item>
+
+						<el-form-item label="Channel type" prop="channelType">
+							<el-input v-model="context.channelType" :readonly="true"></el-input>
+						</el-form-item>
+
+						<el-form-item label="Receiver server">
+							<el-input v-model="context.receiverUrl"></el-input>
+						</el-form-item>
+
+						<el-form-item>
+							<el-button @click="submitForm" type="primary">Sent Alert</el-button>
+						</el-form-item>
+
+					</el-form>
+				</el-col>
+			</el-row>
+
+			<el-collapse v-if="preview.loaded" v-model="preview.collapse">
+				<el-collapse-item title="Message preview" name="1">
+					<div style="overflow-x:scroll;"><pre>{{ preview.text }}</pre></div>
+				</el-collapse-item>
+			</el-collapse>
+		</div>
+	</template>
+
+	<el-container id="app" width="320px">
+
+		<el-header>
+      <el-image src="da-vinci_logo.jpg" alt="Da Vinci"></el-image>
+		</el-header>
+
+		<el-main>
+				<router-view></router-view>
+		</el-main>
+    <el-footer height="auto">
+		<div>
+			You can visit demo receiver app <a th:href="@{${receiverApp}}">here.</a>
+		</div>
+      <el-image src="healthlx-logo.png" alt="HealthLX" class="hlx-logo"></el-image>
+    </el-footer>
+
+	</el-container>
+
+	<script type="text/javascript" src="app.js">
+	</script>
+</body>
+</html>

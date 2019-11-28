@@ -1,0 +1,23 @@
+ehr:
+  fhir-server-uri: <FHIR SERVER URI GOES HERE>
+
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          ehr-client:
+            client-id: <YOUR CLIENT ID GOESHERE>
+            client-name: Alert Sender
+            provider: ehr-provider
+            redirect-uri: "{baseUrl}/login/oauth2/code/ehr-client"
+            client-authentication-method: none
+            authorization-grant-type: authorization_code
+            scope: 'launch/patient,openid,profile,launch,fhirUser,launch/encounter,patient/Patient.read,patient/*.read,offline_access,patient/Observation.read,patient/*.write,patient/Encounter.read,patient/Observation.write'
+        provider:
+          ehr-provider:
+            token-uri: https://auth.hspconsortium.org/token
+            authorization-uri: https://auth.hspconsortium.org/authorize
+            user-info-uri: https://auth.hspconsortium.org/userinfo
+            jwk-set-uri: https://auth.hspconsortium.org/jwk
+            userNameAttribute: sub
