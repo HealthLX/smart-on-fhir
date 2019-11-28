@@ -49,23 +49,6 @@
 							<el-input v-model="context.patient.name" :readonly="true"></el-input>
 						</el-form-item>
 
-						<el-form-item label="Event" prop="eventId">
-							<el-select v-model="context.eventId" @change="onChange">
-								<el-option
-										v-for="event in context.events"
-										:label="event.name"
-										:value="event.id"></el-option>
-							</el-select>
-						</el-form-item>
-
-						<el-form-item label="Channel type" prop="channelType">
-							<el-input v-model="context.channelType" :readonly="true"></el-input>
-						</el-form-item>
-
-						<el-form-item label="Receiver server">
-							<el-input v-model="context.receiverUrl"></el-input>
-						</el-form-item>
-
 						<el-form-item>
 							<el-button @click="submitForm" type="primary">Sent Alert</el-button>
 						</el-form-item>
@@ -73,12 +56,6 @@
 					</el-form>
 				</el-col>
 			</el-row>
-
-			<el-collapse v-if="preview.loaded" v-model="preview.collapse">
-				<el-collapse-item title="Message preview" name="1">
-					<div style="overflow-x:scroll;"><pre>{{ preview.text }}</pre></div>
-				</el-collapse-item>
-			</el-collapse>
 		</div>
 	</template>
 
@@ -92,9 +69,6 @@
 				<router-view></router-view>
 		</el-main>
     <el-footer height="auto">
-		<div>
-			You can visit demo receiver app <a th:href="@{${receiverApp}}">here.</a>
-		</div>
       <el-image src="healthlx-logo.png" alt="HealthLX" class="hlx-logo"></el-image>
     </el-footer>
 
