@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 
 <head>
-	<meta charset="utf-8">
-	<title>HealthLX smart-on-fhir sample demo app</title>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/vue-router/3.0.6/vue-router.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/element-ui/2.8.2/index.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/element-ui/2.8.2/locale/en.min.js"></script>
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/element-ui/2.8.2/theme-chalk/index.css">
-	<style>
+  <meta charset="utf-8">
+  <title>HealthLX smart-on-fhir sample demo app</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue-router/3.0.6/vue-router.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/element-ui/2.8.2/index.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/element-ui/2.8.2/locale/en.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/element-ui/2.8.2/theme-chalk/index.css">
+  <style>
 		body {
 			font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 			margin: 0;
@@ -29,52 +29,37 @@
 		    align-items: center;
 		}
 
+  </style>
 
-    </style>
 </head>
 
 <body>
 
-	<template id="hlx-patient-form">
-		<div v-loading="loading">
-			<el-row type="flex" justify="center">
-				<el-col :span="8" :xs="16" :sm="16" :md="8">
-					<el-form
-							ref="patientForm"
-							:rules="rules"
-							:model="context"
-							label-width="120px">
+<template id="hlx-patient-form">
+  <div v-loading="loading">
+    <el-row type="flex" justify="center">
+      <el-col :span="8" :xs="16" :sm="16" :md="8">
+          {{ context.patient }}
+      </el-col>
+    </el-row>
+  </div>
+</template>
 
-						<el-form-item label="Patient">
-							<el-input v-model="context.patient.name" :readonly="true"></el-input>
-						</el-form-item>
+<el-container id="app" width="320px">
 
-						<el-form-item>
-							<el-button @click="submitForm" type="primary">Sent Alert</el-button>
-						</el-form-item>
+  <el-header>
+  </el-header>
 
-					</el-form>
-				</el-col>
-			</el-row>
-		</div>
-	</template>
+  <el-main>
+    <router-view></router-view>
+  </el-main>
+  <el-footer height="auto">
+  </el-footer>
 
-	<el-container id="app" width="320px">
+</el-container>
 
-		<el-header>
-      <el-image src="da-vinci_logo.jpg" alt="Da Vinci"></el-image>
-		</el-header>
+<script type="text/javascript" src="app.js">
+</script>
 
-		<el-main>
-				<router-view></router-view>
-		</el-main>
-    <el-footer height="auto">
-      <el-image src="healthlx-logo.png" alt="HealthLX" class="hlx-logo"></el-image>
-    </el-footer>
-
-	</el-container>
-
-	<script type="text/javascript" src="app.js">
-	</script>
 </body>
 </html>

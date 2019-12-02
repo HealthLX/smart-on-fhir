@@ -13,7 +13,7 @@ spring:
             redirect-uri: "{baseUrl}/login/oauth2/code/ehr-client"
             client-authentication-method: none
             authorization-grant-type: authorization_code
-            scope: 'launch/patient,openid,profile,launch,fhirUser,launch/encounter,patient/Patient.read,patient/*.read,offline_access,patient/Observation.read,patient/*.write,patient/Encounter.read,patient/Observation.write'
+            scope: 'launch/patient,openid,profile,launch,fhirUser,patient/Patient.read,patient/*.read,offline_access'
         provider:
           ehr-provider:
             token-uri: https://auth.hspconsortium.org/token
