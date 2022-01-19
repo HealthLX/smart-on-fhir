@@ -1,0 +1,15 @@
+plugins {
+    id 'maven-publish'
+}
+
+repositories {
+    mavenLocal()
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            from components.java
+        }
+    }
+}

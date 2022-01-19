@@ -1,28 +1,15 @@
 plugins {
-    id 'java'
-}
-
-repositories {
-    mavenCentral()
+    id 'myproject.java-conventions'
+    id 'myproject.mvn-conventions'
+    id 'java-library'
 }
 
 dependencies {
-    compile "org.springframework.security:spring-security-oauth2-client:5.2.0.RELEASE"
-    compile "org.springframework.security:spring-security-oauth2-jose:5.2.0.RELEASE"
-    compile "javax.servlet:javax.servlet-api:4.0.1"
+    api "org.springframework.security:spring-security-oauth2-client:5.6.1"
+    api "org.springframework.security:spring-security-oauth2-jose:5.6.1"
+    compileOnly  "javax.servlet:javax.servlet-api:4.0.1"
 
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.1'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
-    testCompile "org.mockito:mockito-core:2.21.0"
-}
-
-test {
-    useJUnitPlatform()
-}
-
-sourceCompatibility = '1.8'
-targetCompatibility = '1.8'
-
-if (project.hasProperty("signing.keyId")) {
-    apply from: 'release.gradle'
+    testImplementation "org.mockito:mockito-core:2.21.0"
+    testImplementation 'org.springframework.boot:spring-boot-starter-test:2.6.2'
+    testImplementation  "javax.servlet:javax.servlet-api:4.0.1"
 }
