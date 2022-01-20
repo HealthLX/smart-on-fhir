@@ -1,6 +1,6 @@
 plugins {
     id 'myproject.java-conventions'
-    id 'myproject.mvn-conventions'
+    id 'myproject.publish-conventions'
 }
 
 
@@ -8,5 +8,8 @@ dependencies {
     implementation project(':core')
     implementation "javax.servlet:javax.servlet-api:4.0.1"
     implementation "org.springframework.security:spring-security-config:5.6.1"
+}
 
+ext {
+    project_name='Smart-on-FHIR Config'
 }

@@ -1,0 +1,82 @@
+plugins {
+    id 'maven-publish'
+    id 'signing'
+}
+
+repositories {
+    mavenLocal()
+}
+
+java {
+    withJavadocJar()
+    withSourcesJar()
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifactId = project.name
+            from components.java
+            versionMapping {
+                usage('java-api') {
+                    fromResolutionOf('runtimeClasspath')
+                }
+                usage('java-runtime') {
+                    fromResolutionResult()
+                }
+            }
+            pom {
+                name = project_name
+                description = project_description
+                url = project_url
+                licenses {
+                    license {
+                        name = 'The Apache License, Version 2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'dhasilin'
+                        name = 'Dmytro Hasilin'
+                        email = 'a.kravs@gmail.com'
+                        organization = 'HealthLX'
+                        organizationUrl = 'https://www.healthlx.com/'
+                    }
+                    developer {
+                        id = 'yuflyud'
+                        name = 'Yuriy Flyud'
+                        email = 'yuflyud@gmail.com'
+                        organization = 'HealthLX'
+                        organizationUrl = 'https://www.healthlx.com/'
+                    }
+                }
+                scm {
+                    connection = project_scm
+                    developerConnection = project_scm
+                    url = project_url
+                }
+            }
+        }
+    }
+    repositories {
+        maven {
+            url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+            credentials {
+                username = ossrhUsername
+                password = ossrhPassword
+            }
+        }
+    }
+}
+if (project.hasProperty("signing.keyId")) {
+    signing {
+        sign publishing.publications.mavenJava
+    }
+}
+
+javadoc {
+    if (JavaVersion.current().isJava9Compatible()) {
+        options.addBooleanOption('html5', true)
+    }
+}
