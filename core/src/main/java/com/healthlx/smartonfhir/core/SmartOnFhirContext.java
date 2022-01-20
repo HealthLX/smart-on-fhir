@@ -4,30 +4,46 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.util.Assert;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpSession;
 import java.util.Map;
 
 /**
- * Class that provides API to get SMART on FHIR launch context attributes. User must be authenticated an authorized
+ * Class that provides API to get SMART on FHIR launch context attributes. User must be authenticated and authorized
  * before using it.
  */
 public class SmartOnFhirContext {
 
-  static final String SMART_CONTEXT_SESSION_KEY = "SMART_ON_FHIR_CONTEXT";
+  //We leave this constant as public in case the RequestAttributes instance is not available. For example while using
+  // the WebSockets.
+  public static final String SMART_CONTEXT_SESSION_KEY = "SMART_ON_FHIR_CONTEXT";
+  private final Map<String, Object> parameters;
 
-  private HttpSession session;
+  private SmartOnFhirContext(Map<String, Object> parameters) {
+    this.parameters = parameters;
+  }
 
-  public SmartOnFhirContext(HttpSession session) {
-    this.session = session;
+  public static SmartOnFhirContext get() {
+    Object contextObj = getSession().getAttribute(SMART_CONTEXT_SESSION_KEY);
+    Assert.state(contextObj != null, "No SmartOnFhirContext object is found within the current HttpSession instance.");
+    Assert.state(contextObj instanceof SmartOnFhirContext, "Smart-On-FHIR context type is invalid.");
+    return (SmartOnFhirContext) contextObj;
+  }
+
+  static void set(Map<String, Object> parameters) {
+    SmartOnFhirContext context = new SmartOnFhirContext(parameters);
+    getSession().setAttribute(SMART_CONTEXT_SESSION_KEY, context);
   }
 
   public String getPatient() {
-    return getContextValue("patient");
+    return (String) parameters.get("patient");
   }
 
   public String getEncounter() {
-    return getContextValue("encounter");
+    return (String) parameters.get("encounter");
   }
 
   public String getProfile() {
@@ -37,13 +53,10 @@ public class SmartOnFhirContext {
     return ((OAuth2User) authentication.getPrincipal()).getAttribute("profile");
   }
 
-  void setContextData(Map<String, Object> additionalParameters) {
-    session.setAttribute(SMART_CONTEXT_SESSION_KEY, additionalParameters);
-  }
-
-  public String getContextValue(String contextKey) {
-    Map attribute = (Map) session.getAttribute(SMART_CONTEXT_SESSION_KEY);
-    Assert.notNull(attribute, "SMART on FHIR context is not initialized. Check authorization.");
-    return (String) attribute.get(contextKey);
+  private static HttpSession getSession() {
+    RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
+    Assert.notNull(requestAttributes, "No RequestAttributes object is currently bound to the thread.");
+    return ((ServletRequestAttributes) requestAttributes).getRequest()
+        .getSession();
   }
 }
