@@ -4,9 +4,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.util.Assert;
-import org.springframework.web.context.request.RequestAttributes;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpSession;
 import java.util.Map;
@@ -54,9 +51,7 @@ public class SmartOnFhirContext {
   }
 
   private static HttpSession getSession() {
-    RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
-    Assert.notNull(requestAttributes, "No RequestAttributes object is currently bound to the thread.");
-    return ((ServletRequestAttributes) requestAttributes).getRequest()
+    return RequestContextUtil.getRequest()
         .getSession();
   }
 }

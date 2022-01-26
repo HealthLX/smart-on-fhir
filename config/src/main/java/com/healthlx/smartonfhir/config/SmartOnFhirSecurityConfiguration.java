@@ -1,5 +1,6 @@
 package com.healthlx.smartonfhir.config;
 
+import com.healthlx.smartonfhir.core.Oauth2TokenResponseAwareAuthenticationSuccessHandler;
 import com.healthlx.smartonfhir.core.SmartOnFhirAccessTokenResponseClient;
 import com.healthlx.smartonfhir.core.SmartOnFhirAuthRequestResolver;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,16 +13,12 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @EnableWebSecurity
 class SmartOnFhirSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-  private final SmartOnFhirAuthRequestResolver smartOnFhirAuthRequestResolver;
-
-  private final SmartOnFhirAccessTokenResponseClient smartOnFhirAccessTokenResponseClient;
-
   @Autowired
-  SmartOnFhirSecurityConfiguration(SmartOnFhirAuthRequestResolver smartOnFhirAuthRequestResolver,
-      SmartOnFhirAccessTokenResponseClient smartOnFhirAccessTokenResponseClient) {
-    this.smartOnFhirAuthRequestResolver = smartOnFhirAuthRequestResolver;
-    this.smartOnFhirAccessTokenResponseClient = smartOnFhirAccessTokenResponseClient;
-  }
+  private SmartOnFhirAuthRequestResolver smartOnFhirAuthRequestResolver;
+  @Autowired
+  private SmartOnFhirAccessTokenResponseClient smartOnFhirAccessTokenResponseClient;
+  @Autowired
+  private Oauth2TokenResponseAwareAuthenticationSuccessHandler authenticationSuccessHandler;
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
@@ -32,6 +29,7 @@ class SmartOnFhirSecurityConfiguration extends WebSecurityConfigurerAdapter {
         .csrf()
         .disable()
         .oauth2Login()
+        .successHandler(authenticationSuccessHandler)
         .authorizationEndpoint()
         .authorizationRequestResolver(this.smartOnFhirAuthRequestResolver)
         .and()
