@@ -7,12 +7,14 @@ import org.springframework.util.Assert;
 
 import javax.servlet.http.HttpSession;
 import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Class that provides API to get SMART on FHIR launch context attributes. User must be authenticated and authorized
  * before using it.
  */
-public class SmartOnFhirContext {
+public final class SmartOnFhirContext {
 
   //We leave this constant as public in case the RequestAttributes instance is not available. For example while using
   // the WebSockets.
@@ -53,5 +55,26 @@ public class SmartOnFhirContext {
   private static HttpSession getSession() {
     return RequestContextUtil.getRequest()
         .getSession();
+  }
+
+  @Override
+  public String toString() {
+    final int maxLength = 32;
+    return new StringBuilder().append(super.toString())
+        .append(": Parameters: ")
+        .append(parameters.entrySet()
+            .stream()
+            .map(o -> {
+              String text = Optional.ofNullable(o.getValue())
+                  .map(Object::toString)
+                  .orElse(null);
+              //Too long values, like id_token will be abbreviated to reduce the output length
+              return o.getKey() + "=" + (text != null && text.length() > maxLength ? text.substring(0, maxLength)
+                  + "..." : text);
+            })
+            .collect(Collectors.joining(", ", "[", "]")))
+        .append(", Profile: ")
+        .append(getProfile())
+        .toString();
   }
 }
