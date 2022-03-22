@@ -1,14 +1,14 @@
 package com.healthlx.smartonfhir.core;
 
+import org.springframework.lang.Nullable;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.util.Assert;
 
 import javax.servlet.http.HttpSession;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * Class that provides API to get SMART on FHIR launch context attributes. User must be authenticated and authorized
@@ -19,10 +19,41 @@ public final class SmartOnFhirContext {
   //We leave this constant as public in case the RequestAttributes instance is not available. For example while using
   // the WebSockets.
   public static final String SMART_CONTEXT_SESSION_KEY = "SMART_ON_FHIR_CONTEXT";
-  private final Map<String, Object> parameters;
 
-  private SmartOnFhirContext(Map<String, Object> parameters) {
-    this.parameters = parameters;
+  private static final String FHIR_USER_CLAIM = "fhirUser";
+  private static final String PROFILE_CLAIM = "profile";
+
+  private static final String PATIENT_PARAM = "patient";
+  private static final String ENCOUNTER_PARAM = "encounter";
+  private static final String FHIR_CONTEXT_PARAM = "fhirContext";
+  private static final String NEED_PATIENT_BANNER_PARAM = "need_patient_banner";
+  private static final String INTENT_PARAM = "intent";
+  private static final String SMART_STYLE_URL_PARAM = "smart_style_url";
+  private static final String TENANT_PARAM = "tenant";
+
+  private final String fhirUser;
+  private final String patient;
+  private final String encounter;
+  private final String[] fhirContext;
+  private final Boolean needPatientBanner;
+  private final String intent;
+  private final String smartStyleUrl;
+  private final String tenant;
+
+  private SmartOnFhirContext(OidcUser user, Map<String, Object> parameters) {
+    this.fhirUser = (String) Optional.ofNullable(user.getClaim(FHIR_USER_CLAIM))
+        .orElse(user.getClaim(PROFILE_CLAIM));
+    patient = (String) parameters.get(PATIENT_PARAM);
+    encounter = (String) parameters.get(ENCOUNTER_PARAM);
+    fhirContext = Optional.ofNullable(parameters.get(FHIR_CONTEXT_PARAM))
+        .map(String[].class::cast)
+        .orElse(new String[0]);
+    needPatientBanner = Optional.ofNullable((String) parameters.get(NEED_PATIENT_BANNER_PARAM))
+        .map(Boolean::parseBoolean)
+        .orElse(null);
+    intent = (String) parameters.get(INTENT_PARAM);
+    smartStyleUrl = (String) parameters.get(SMART_STYLE_URL_PARAM);
+    tenant = (String) parameters.get(TENANT_PARAM);
   }
 
   public static SmartOnFhirContext get() {
@@ -32,24 +63,50 @@ public final class SmartOnFhirContext {
     return (SmartOnFhirContext) contextObj;
   }
 
-  static void set(Map<String, Object> parameters) {
-    SmartOnFhirContext context = new SmartOnFhirContext(parameters);
+  static void set(Authentication authentication, Map<String, Object> tokenResponseAdditionalParameters) {
+    Assert.state(authentication.getPrincipal() instanceof OidcUser, "Current user is not an OidcUser.");
+    SmartOnFhirContext context = new SmartOnFhirContext((OidcUser) authentication.getPrincipal(),
+        tokenResponseAdditionalParameters);
     getSession().setAttribute(SMART_CONTEXT_SESSION_KEY, context);
   }
 
+  @Nullable
+  public String getFhirUser() {
+    return fhirUser;
+  }
+
+  @Nullable
   public String getPatient() {
-    return (String) parameters.get("patient");
+    return patient;
   }
 
+  @Nullable
   public String getEncounter() {
-    return (String) parameters.get("encounter");
+    return encounter;
   }
 
-  public String getProfile() {
-    Authentication authentication = SecurityContextHolder.getContext()
-        .getAuthentication();
-    Assert.notNull(authentication, "Authentication object is missing from security context.");
-    return ((OAuth2User) authentication.getPrincipal()).getAttribute("profile");
+  public String[] getFhirContext() {
+    return fhirContext;
+  }
+
+  @Nullable
+  public Boolean getNeedPatientBanner() {
+    return needPatientBanner;
+  }
+
+  @Nullable
+  public String getIntent() {
+    return intent;
+  }
+
+  @Nullable
+  public String getSmartStyleUrl() {
+    return smartStyleUrl;
+  }
+
+  @Nullable
+  public String getTenant() {
+    return tenant;
   }
 
   private static HttpSession getSession() {
@@ -59,22 +116,24 @@ public final class SmartOnFhirContext {
 
   @Override
   public String toString() {
-    final int maxLength = 32;
     return new StringBuilder().append(super.toString())
-        .append(": Parameters: ")
-        .append(parameters.entrySet()
-            .stream()
-            .map(o -> {
-              String text = Optional.ofNullable(o.getValue())
-                  .map(Object::toString)
-                  .orElse(null);
-              //Too long values, like id_token will be abbreviated to reduce the output length
-              return o.getKey() + "=" + (text != null && text.length() > maxLength ? text.substring(0, maxLength)
-                  + "..." : text);
-            })
-            .collect(Collectors.joining(", ", "[", "]")))
-        .append(", Profile: ")
-        .append(getProfile())
+        .append(": {fhirUser='")
+        .append(fhirUser)
+        .append("', patient='")
+        .append(patient)
+        .append("', encounter='")
+        .append(encounter)
+        .append("', fhirContext=")
+        .append(Arrays.toString(fhirContext))
+        .append(", need_patient_banner=")
+        .append(needPatientBanner)
+        .append(", intent='")
+        .append(intent)
+        .append("', smart_style_url='")
+        .append(smartStyleUrl)
+        .append("', tenant='")
+        .append(tenant)
+        .append("'}")
         .toString();
   }
 }

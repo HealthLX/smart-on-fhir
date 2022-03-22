@@ -28,6 +28,6 @@ public class Oauth2TokenResponseAwareAuthenticationSuccessHandler
     Assert.isInstanceOf(OAuth2AccessTokenResponse.class, tokenResponse,
         "Token response is not of type OAuth2AccessTokenResponse");
 
-    SmartOnFhirContext.set(((OAuth2AccessTokenResponse) tokenResponse).getAdditionalParameters());
+    SmartOnFhirContext.set(authentication, ((OAuth2AccessTokenResponse) tokenResponse).getAdditionalParameters());
   }
 }
